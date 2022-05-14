@@ -64,8 +64,9 @@
                     name="cpf" 
                     id="cpf" 
                     placeholder= "Digite seu CPF: ">
-                    <p v-if="errorCpfEmpty" class="textError">O CPF não pode estar vazio </p>
+                    <p v-if="errorCpfEmpty" class="textError">O CPF não pode estar em branco </p>
                     <p v-if="errorCpfLength" class="textError">O CPF deve possuir 11 caracteres </p>
+                    <p v-if="errorCpfInvalid" class="textError">Digite um CPF válido </p>
                     
                 </div> 
                 <div class="meia-caixa espaco">
@@ -143,6 +144,35 @@
 
 <script>
 
+  function ValidadorCPF(Cpf) {
+      var Soma;
+      var Resto;
+      var i;
+      Soma = 0;
+      if (Cpf == "00000000000") return false;
+      if (Cpf == "11111111111") return false;
+      if (Cpf == "22222222222") return false;
+      if (Cpf == "33333333333") return false;
+      if (Cpf == "44444444444") return false;
+      if (Cpf == "55555555555") return false;
+      if (Cpf == "66666666666") return false;
+      if (Cpf == "77777777777") return false;
+      if (Cpf == "88888888888") return false;
+      if (Cpf == "99999999999") return false;
+      for (i = 1; i <= 9; i++) Soma = Soma + parseInt(Cpf.substring(i - 1, i)) * (11 - i);
+      Resto = (Soma * 10) % 11;
+      if ((Resto == 10) || (Resto == 11)) Resto = 0;
+      if (Resto != parseInt(Cpf.substring(9, 10))) return false;
+      Soma = 0;
+      for (i = 1; i <= 10; i++) Soma = Soma + parseInt(Cpf.substring(i - 1, i)) * (12 - i);
+      Resto = (Soma * 10) % 11;
+      if ((Resto == 10) || (Resto == 11)) Resto = 0;
+      if (Resto != parseInt(Cpf.substring(10, 11))) return false;
+      return true;
+  }
+  var Cpf = "12345678909";
+  alert(ValidadorCPF(Cpf));
+
 export default {
   name: 'App',
   components: {
@@ -153,6 +183,7 @@ export default {
         errorNameEmpty: false,
         errorCpfLength: false,
         errorCpfEmpty: false,
+        errorCpfInvalid: false,
         errorEmail: false,
         errorEmailEmpty: false,
         errorConfirmEmail: false,
@@ -189,10 +220,17 @@ export default {
         if (!this.cpf) {
           this.errorCpfEmpty = true
           this.errorCpfLength = false
+          this.errorCpfInvalid = false
         } else if(this.cpf.length < 14) {
           this.errorCpfLength = true
           this.errorCpfEmpty = false
+          this.errorCpfInvalid = false
+        } else if(!ValidadorCPF(this.cpf.replace(/[^0-9]/g, ''))) {
+          this.errorCpfInvalid = true
+          this.errorCpfLength = false
+          this.errorCpfEmpty = false
         } else {
+          this.errorCpfInvalid = false
           this.errorCpfLength = false
           this.errorCpfEmpty = false
         }
@@ -251,7 +289,7 @@ border: none;
 body {
 background-image: url('../imagens/walps2.png');
 padding-top: 10vh;
-padding-bottom: 5vh;
+padding-bottom: 10vh;
 background-size: cover;
 background-color: rgb(241, 98, 165);
 
@@ -273,7 +311,8 @@ a {
 
 #app {
     width: 580px;
-    margin-left: 50px;
+    margin-left: auto;
+    margin-right: auto;
     background-color: #FFFFFF;
     border-radius: 10px;
     padding: 25px;
