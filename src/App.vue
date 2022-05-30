@@ -21,7 +21,9 @@
                     <p><br>
                         Lore ipsum dolor sit amet, consectetur adipiscing elit. Orci, vulutpat in iaculis nec nibh nisl tellus.>
                     </p>   
-                
+
+                    <img :src="image">
+                                  
                 <div class="caixa-cheia">
                     <label for="name"><br>Nome</label>
                     <input
@@ -132,7 +134,7 @@
 
                 <div>
                     <br>
-                    <input type="submit" id="btn-submit" value="Próximo" href="https://www.youtube.com/">
+                    <input type="submit" id="btn-submit" value="Próximo">
                     
                 </div>
               </form>
@@ -143,6 +145,10 @@
 </template>
 
 <script>
+import axios from 'axios';
+
+
+
 
   function ValidadorCPF(Cpf) {
       var Soma;
@@ -172,7 +178,6 @@
   }
   var Cpf = "12345678909";
   alert(ValidadorCPF(Cpf));
-
 export default {
   name: 'App',
   components: {
@@ -201,7 +206,7 @@ export default {
         nascimento: null,
         emailsms: null,
         whatsapp: null,
-
+        image: null,
       }
     },
     methods:{
@@ -216,7 +221,6 @@ export default {
           this.errorNameEmpty = false
           this.errorNameLength = false
         }
-
         if (!this.cpf) {
           this.errorCpfEmpty = true
           this.errorCpfLength = false
@@ -234,7 +238,6 @@ export default {
           this.errorCpfLength = false
           this.errorCpfEmpty = false
         }
-
         if (!this.celphone) {
           this.errorCelphoneEmpty = true
           this.errorCelphoneLength = false
@@ -245,7 +248,6 @@ export default {
           this.errorCelphoneEmpty = false
           this.errorCelphoneLength = false
         }
-
         if (!this.nascimento) {
           this.errorNascimentoEmpty = true
           this.errorNascimentoLength = false
@@ -256,27 +258,34 @@ export default {
           this.errorNascimentoEmpty = false
           this.errorNascimentoLength = false
         }
-
         const emailRegex = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?$/i
         if (!emailRegex.test(this.email)) {
           this.errorEmail = true
          } else {
           this.errorEmail = false
          }
-
          if (this.email !== this.confirmEmail) {
             this.errorConfirmEmail = true
         } else {
             this.errorConfirmEmail = false
         }
 
+        
+        axios.get('https://app.fakejson.com/q/sIra2Obl?token=tkDFCkZPsnUeU_Bc76Af8w')
+          .then( response => {
+           //this.image = response.data[0].url;
+           console.log(response);
+          })
+          .catch( error => {
+            console.log('ERRO EM ALGUMA COISA', error)
+          })
     }
 }}
 
 </script>
 
 <style>
-* {
+*{
 margin: 0;
 padding: 0;
 box-sizing: border-box;
@@ -288,8 +297,8 @@ border: none;
 
 body {
 background-image: url('../imagens/walps2.png');
-padding-top: 10vh;
-padding-bottom: 10vh;
+padding-top: 3vh;
+padding-bottom: 3vh;
 background-size: cover;
 background-color: rgb(241, 98, 165);
 
